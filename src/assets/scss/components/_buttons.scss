@@ -1,0 +1,13 @@
+.btn {
+  border-radius: 100px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+
+  &--light {
+    background-color: $white;
+    color: #8E9AD5;
+  }
+}
