@@ -25,5 +25,7 @@ $media-expressions: ('screen': 'screen',
 @import 'base/forms';
 
 @import 'layouts/common';
+@import 'layouts/main';
 
 @import 'components/buttons';
+@import 'components/pacient';

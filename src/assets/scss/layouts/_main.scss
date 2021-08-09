@@ -1,0 +1,127 @@
+.main {
+  width: 100%;
+  color: $white;
+  display: flex;
+  align-items: stretch;
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(63.53deg, #2D8550 16.62%, #5E6EC2 83.38%);
+    opacity: 0.7;
+    width: 32.64%;
+    // height: 100vh;
+  }
+
+  &__sidebar-top {
+    font-size: 36px;
+    padding: 14.89% 0 0 10.64%;
+    margin: 0 -4.04%;
+
+    &>* {
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      background-color: $white;
+      border-radius: 50%;
+      margin: 0 4.04%;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  &__sidebar-middle {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18.55vh;
+    justify-content: flex-end;
+
+    &>span {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+  }
+
+  &__sidebar-counters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: $dark-gray;
+    margin: 0 -2.13%;
+
+    &>span {
+      display: flex;
+      justify-content: space-between;
+      background-color: $white;
+      width: 40.43%;
+      margin: 0 2.13% 4.26%;
+      font-size: 48px;
+      font-weight: bold;
+      box-shadow: 0px 0px 50px rgba(131, 42, 64, 0.4);
+      border-radius: 40px;
+
+      span {
+        &:last-of-type {
+          padding: 0 24.74%;
+        }
+      }
+    }
+  }
+
+  &__sidebar-bottom {
+    letter-spacing: 0.02em;
+    text-align: center;
+    background-color: rgba(255, 255, 255, .15);
+    color: $white;
+    padding: 25px 0;
+
+    &>span {
+      &:first-of-type {
+        font-size: 28px;
+        font-weight: lighter;
+      }
+
+      &:last-of-type {
+        font-size: 32px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__cards-holder {
+    flex-grow: 1;
+  }
+
+  &__actions-holder {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 6.25vh;
+    margin: 0 -1.5%;
+
+    .btn {
+      max-width: 28.86%;
+      width: 100%;
+      font-size: 28px;
+      margin: 0 1.5%;
+    }
+  }
+
+  &__result {
+    .btn {
+      font-size: 24px;
+      padding: 0 40px;
+    }
+  }
+}
