@@ -78,39 +78,39 @@
 </template>
 
 <script>
-import TinderCard from './TinderCard.vue'
-import queueHandle from './queue-handle'
-import touchEvent from './touch-event'
-import transitionEvent from './transition-event'
-import openMethods from './open-methods'
-import { initStatus } from './status'
+import TinderCard from "./TinderCard.vue";
+import queueHandle from "./queue-handle";
+import touchEvent from "./touch-event";
+import transitionEvent from "./transition-event";
+import openMethods from "./open-methods";
+import { initStatus } from "./status";
 
-let resizeTimer
+let resizeTimer;
 
 export default {
-  name: 'Tinder',
-  emits: ['update:queue', 'submit'],
+  name: "Tinder",
+  emits: ["update:queue", "submit"],
   mixins: [queueHandle, touchEvent, transitionEvent, openMethods],
   components: {
-    TinderCard
+    TinderCard,
   },
   props: {
     // TODO: 考虑添加一个不强制渲染的配置
     allowSuper: {
       type: Boolean,
-      default: true
+      default: true,
     },
     allowDown: {
       type: Boolean,
-      default: false
+      default: false,
     },
     queue: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     keyName: {
       type: String,
-      default: 'key'
+      default: "key",
     },
     /**
      * 横向移动直至消失时，移动距离占卡片 "一半宽度" 的比例
@@ -118,7 +118,7 @@ export default {
      */
     pointerThreshold: {
       type: Number,
-      default: 0.5
+      default: 0.5,
     },
     /**
      * 向上移动直至消失时，移动距离占卡片高度的比例
@@ -126,143 +126,149 @@ export default {
      */
     superThreshold: {
       type: Number,
-      default: 0.5
+      default: 0.5,
     },
     downThreshold: {
       type: Number,
-      default: 0.5
+      default: 0.5,
     },
     // 执行下次操作是否需要等卡片完全消失，默认非同步操作
     sync: {
       type: Boolean,
-      default: false
+      default: false,
     },
     // 最大渲染数
     max: {
       type: Number,
-      default: 3
+      default: 3,
     },
     scaleStep: {
       type: Number,
       // default: 30
-      default: 0.05
+      default: 0.05,
     },
     offsetY: {
       type: Number,
-      default: 0
+      default: 0,
     },
     offsetUnit: {
       type: String,
-      default: 'px'
-    }
+      default: "px",
+    },
+    // countPrep1: {
+    //   default: "0",
+    // },
   },
   data: () => ({
     size: {
       top: 0,
       width: 0,
-      height: 0
+      height: 0,
     },
     state: initStatus(), // 此次触摸及移动坐标等状态
     list: [], // 实际使用的列表，用以与新列表比较，对新列表 item 做唯一处理，避免 dom 被重用
-    tinderMounted: false
+    tinderMounted: false,
+    // countPrep1: 0,
+    // countPrep2: 0,
+    // countPrep3: 0,
   }),
   computed: {
     status() {
-      return this.state.status
+      return this.state.status;
     },
     // 在 x 轴上移动距离相对于卡片一半宽度的比例
     ratio() {
       if (this.size.width) {
-        const { start, move } = this.state
-        const x = move.x - start.x || 0
-        const ratio = x / (this.size.width * 0.5)
-        return ratio
+        const { start, move } = this.state;
+        const x = move.x - start.x || 0;
+        const ratio = x / (this.size.width * 0.5);
+        return ratio;
       }
-      return 0
+      return 0;
     },
     // 卡片上喜欢/不喜欢图标的不透明度
     pointerOpacity() {
-      return this.ratio / this.pointerThreshold
+      return this.ratio / this.pointerThreshold;
     },
     disY() {
       if (this.allowSuper || this.allowDown) {
-        return this.state.move.y - this.state.start.y
+        return this.state.move.y - this.state.start.y;
       }
-      return 0
+      return 0;
     },
     superOpacity() {
       if (!this.allowSuper) {
-        return 0
+        return 0;
       }
-      const ratio = this.disY / (-this.superThreshold * this.size.height)
-      const pointerOpacity = Math.abs(this.pointerOpacity)
-      return ratio > pointerOpacity ? ratio : 0
+      const ratio = this.disY / (-this.superThreshold * this.size.height);
+      const pointerOpacity = Math.abs(this.pointerOpacity);
+      return ratio > pointerOpacity ? ratio : 0;
     },
     downOpacity() {
       if (!this.allowDown) {
-        return 0
+        return 0;
       }
-      const ratio = this.disY / (this.downThreshold * this.size.height)
-      const pointerOpacity = Math.abs(this.pointerOpacity)
-      return ratio > pointerOpacity ? ratio : 0
+      const ratio = this.disY / (this.downThreshold * this.size.height);
+      const pointerOpacity = Math.abs(this.pointerOpacity);
+      return ratio > pointerOpacity ? ratio : 0;
     },
     likeOpacity() {
       // 如果当前卡片正在往上滑，需要隐藏喜欢/不喜欢
       if (this.superOpacity || this.downOpacity) {
-        return 0
+        return 0;
       }
-      return this.pointerOpacity
+      return this.pointerOpacity;
     },
     nopeOpacity() {
-      return -this.likeOpacity
-    }
+      return -this.likeOpacity;
+    },
   },
   watch: {
     queue(val) {
-      const keyName = this.keyName
-      const newKeys = val.map(item => item[keyName])
-      const oldKeys = this.list.map(item => item[keyName])
-      this.diff(newKeys, oldKeys)
-    }
+      const keyName = this.keyName;
+      const newKeys = val.map((item) => item[keyName]);
+      const oldKeys = this.list.map((item) => item[keyName]);
+      this.diff(newKeys, oldKeys);
+    },
   },
   mounted() {
     if (!this.$el.offsetWidth || !this.$el.offsetHeight) {
       /* eslint-disable-next-line */
-      console.error('请设置vue-tinder的宽高');
-      return
+      console.error("请设置vue-tinder的宽高");
+      return;
     }
     this.size = {
       top: this.$el.offsetTop,
       width: this.$el.offsetWidth,
-      height: this.$el.offsetHeight
-    }
-    window.onresize = this.getSize
-    this.tinderMounted = true
+      height: this.$el.offsetHeight,
+    };
+    window.onresize = this.getSize;
+    this.tinderMounted = true;
   },
   created() {
-    this.list = this.queue.slice(0)
+    this.list = this.queue.slice(0);
   },
   unmounted() {
-    window.removeEventListener('onresize', this.getSize)
+    window.removeEventListener("onresize", this.getSize);
   },
   methods: {
     // 获取组件尺寸及位置，用以决定旋转角度、显示对应状态等
     getSize() {
-      clearInterval(resizeTimer)
+      clearInterval(resizeTimer);
       resizeTimer = setTimeout(() => {
         this.size = {
           top: this.$el.offsetTop,
           width: this.$el.offsetWidth,
-          height: this.$el.offsetHeight
-        }
-      }, 300)
+          height: this.$el.offsetHeight,
+        };
+      }, 300);
     },
     // 当前卡片已经离开
     resetStatus() {
-      this.state = initStatus()
-    }
-  }
-}
+      this.state = initStatus();
+    },
+  },
+};
 </script>
 
 <style scoped>

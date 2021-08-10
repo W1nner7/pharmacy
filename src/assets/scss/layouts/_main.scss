@@ -17,16 +17,17 @@
     font-size: 36px;
     padding: 14.89% 0 0 10.64%;
     margin: 0 -4.04%;
+    display: flex;
 
     &>* {
       display: inline-block;
-      width: 70px;
-      height: 70px;
+      width: 14.89%;
+      padding: 0 0 14.89% 0;
+      height: calc(width);
       background-color: $white;
       border-radius: 50%;
       margin: 0 4.04%;
       border: none;
-      padding: 0;
     }
   }
 

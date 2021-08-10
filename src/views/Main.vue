@@ -10,13 +10,13 @@
           <span>Параметры:</span>
           <div class="main__sidebar-counters">
             <span>
-              <span>:(</span><span>{{ this.product1 }}</span>
+              <span>:(</span><span>{{ this.$store.state.product1 }}</span>
             </span>
             <span>
-              <span>:) </span><span>{{ this.product2 }} </span>
+              <span>:) </span><span>{{ this.$store.state.product2 }} </span>
             </span>
             <span>
-              <span>&lt;3</span> <span> {{ this.product3 }}</span>
+              <span>&lt;3</span> <span> {{ this.$store.state.product3 }}</span>
             </span>
           </div>
         </div>
@@ -34,18 +34,21 @@
             key-name="id"
             v-model:queue="queue"
             :max="3"
-            :offset-y="10"
-            allow-down
+            :offset-y="5"
             @submit="onSubmit"
+            :countPrep1="this.$store.state.product1"
           >
             <template #default="{ data }">
-              <!-- <div
-                class="pic"
-                :style="{
-                  'background-image': `url(https://cn.bing.com//th?id=OHR.${data.id}_UHD.jpg&pid=hp&w=720&h=1280&rs=1&c=4&r=0)`,
-                }"
-              /> -->
-              <Pacient />
+              <div class="pacient">
+                <div
+                  class="pacient__img-holder"
+                  :style="{ 'background-image': `url(${data.id.img})` }"
+                ></div>
+                <div class="pacient__info">
+                  <strong>{{ data.id.name }}, {{ data.id.age }} рокiв</strong>
+                  <p>{{ data.id.description }}</p>
+                </div>
+              </div>
             </template>
             <template #like>
               <img class="like-pointer" src="@/assets/img/stamp-3.png" />
@@ -81,31 +84,13 @@
           </Tinder>
         </div>
         <div class="main__actions-holder">
-          <button
-            class="btn btn--purple"
-            @click="
-              increment1();
-              decide('nope');
-            "
-          >
+          <button class="btn btn--purple" @click="decide('nope')">
             Препарат 1
           </button>
-          <button
-            class="btn btn--blue"
-            @click="
-              increment2();
-              decide('super');
-            "
-          >
+          <button class="btn btn--blue" @click="decide('super')">
             Препарат 2
           </button>
-          <button
-            class="btn btn--yellow"
-            @click="
-              increment3();
-              decide('like');
-            "
-          >
+          <button class="btn btn--yellow" @click="decide('like')">
             Препарат 3
           </button>
         </div>
@@ -119,13 +104,12 @@
         <span>препарат 3: {{ toPercentage(product3) }} %</span><br />
         <span>"Что я здесь делаю?"</span>
         <p>
-          Это тествовое задание, так что не будем углубляться в глубины проблем
+          Это тестовое задание, так что не будем углубляться в глубины проблем
           фармацевтов
         </p>
         <button @click="reset" class="btn btn--gray">
           Попробовать еще раз
         </button>
-        <pacient>123</pacient>
       </div>
     </template>
   </section>
@@ -134,26 +118,26 @@
 <script>
 import Tinder from "@/components/vue-tinder/Tinder.vue";
 import source from "@/bing";
-import Pacient from "../components/Pacient.vue";
 
 export default {
   name: "Main",
   components: {
     Tinder,
-    Pacient,
   },
-
+  props: ["countPrep1"],
   data() {
     return {
-      product1: 0,
-      product2: 0,
-      product3: 0,
+      product1: this.$store.state.product1,
+      product2: this.$store.state.product2,
+      product3: this.$store.state.product3,
       count: 0,
       amount: 5,
 
       queue: [],
       offset: 0,
       history: [],
+
+      countPrep1: this.$store.state.product1,
     };
   },
   created() {
@@ -161,26 +145,33 @@ export default {
   },
   mounted() {
     console.log(this.product1, this.product2, this.product3);
+    console.log(this.countPrep1, "countPrep1");
   },
 
   methods: {
-    increment1() {
-      this.product1++;
-      this.count++;
-      console.log(this.product1);
-    },
+    // increment1() {
+    //   this.product1++;
+    //   this.count++;
+    //   this.countPrep1++;
+    //   console.log(this.product1, this.countPrep1, this);
+    // },
+    // increment() {
+    //   () => {
+    //     this.countPrep1++;
+    //     console.log(this.countPrep1);
+    //   };
+    // },
+    // increment2() {
+    //   this.product2++;
+    //   this.count++;
+    //   console.log(this.product2);
+    // },
 
-    increment2() {
-      this.product2++;
-      this.count++;
-      console.log(this.product2);
-    },
-
-    increment3() {
-      this.product3++;
-      this.count++;
-      console.log(this.product3);
-    },
+    // increment3() {
+    //   this.product3++;
+    //   this.count++;
+    //   console.log(this.product3);
+    // },
 
     toPercentage(product) {
       const percent = Math.round((product * 100) / this.amount);
@@ -188,9 +179,7 @@ export default {
     },
 
     reset() {
-      this.product1 = 0;
-      this.product2 = 0;
-      this.product3 = 0;
+      this.$store.commit("resetProducts");
       this.count = 0;
     },
 
@@ -207,7 +196,9 @@ export default {
       }
     },
     onSubmit({ item }) {
-      if (this.queue.length < 3) {
+      try {
+      } catch {}
+      if (this.queue.length < 1) {
         this.mock();
       }
       this.history.push(item);
@@ -243,143 +234,3 @@ export default {
 };
 </script>
 
-<style>
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  /* background-color: #20262e; */
-  overflow: hidden;
-}
-
-#app .vue-tinder {
-  box-shadow: 0px 0px 40px rgba(127, 127, 127, 0.4);
-  border-radius: 40px;
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  top: 12.69%;
-  margin: auto;
-  width: 55.67%;
-  height: 57.62%;
-  /* overflow: hidden; */
-
-  /* width: calc(100% - 20px); */
-  /* height: calc(100% - 23px - 65px - 47px - 16px); */
-  /* min-width: 300px; */
-  /* max-width: 355px; */
-}
-
-.nope-pointer,
-.like-pointer {
-  position: absolute;
-  z-index: 1;
-  width: 66%;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 50%;
-  transform: translateX(-50%) translateY(-40%) rotate(-15deg);
-}
-
-.nope-pointer {
-  /* right: 10px; */
-}
-
-.like-pointer {
-  transform: translateX(-50%) translateY(-40%) rotate(15deg);
-}
-
-.super-pointer,
-.down-pointer {
-  position: absolute;
-  z-index: 1;
-  width: 66%;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 50%;
-  transform: translateX(-50%) translateY(-40%) rotate(-15deg);
-}
-
-.super-pointer {
-  /* bottom: 40px; */
-}
-
-.down-pointer {
-  top: 40px;
-}
-
-.rewind-pointer {
-  position: absolute;
-  z-index: 1;
-  top: 20px;
-  right: 10px;
-  width: 112px;
-  height: 78px;
-}
-
-.pic {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-}
-
-.btns {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 30px;
-  margin: auto;
-  height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 300px;
-  max-width: 355px;
-}
-
-.btns img {
-  margin-right: 12px;
-  box-shadow: 0 4px 9px rgba(0, 0, 0, 0.15);
-  border-radius: 50%;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btns img:nth-child(2n + 1) {
-  width: 53px;
-}
-
-.btns img:nth-child(2n) {
-  width: 65px;
-}
-
-.btns img:nth-last-child(1) {
-  margin-right: 0;
-}
-
-/* .vue-tinder.right-end,
-.vue-tinder.left-end {
-  transform: translateZ(20px);
-}
-.vue-tinder.right-end .tinder-card:nth-child(1) {
-  animation: rightEnd 0.2s ease-in-out;
-}
-.vue-tinder.left-end .tinder-card:nth-child(1) {
-  animation: leftEnd 0.2s ease-in-out;
-}
-@keyframes leftEnd {
-  50% {
-    transform: rotateY(8deg);
-  }
-}
-@keyframes rightEnd {
-  50% {
-    transform: rotateY(-8deg);
-  }
-} */
-</style>

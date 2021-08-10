@@ -5,6 +5,8 @@
     </div>
     <div class="pacient__info">
       <strong>Валя, 75 рочкив</strong>
+      <!-- <strong>{{ pacient.name }}</strong> -->
+
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi,
         praesentium.
