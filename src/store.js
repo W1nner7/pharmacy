@@ -5,6 +5,7 @@ export default createStore({
     product1: 0,
     product2: 0,
     product3: 0,
+    counter: 0,
   },
   mutations: {
     productAmount1(state) {
@@ -15,6 +16,12 @@ export default createStore({
     },
     productAmount3(state) {
       state.product3++;
+    },
+    countIncrement(state) {
+      state.counter++;
+    },
+    countReset(state) {
+      state.counter = 0;
     },
     resetProducts(state) {
       state.product1 = 0;

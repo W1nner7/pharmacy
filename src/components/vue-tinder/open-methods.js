@@ -51,35 +51,18 @@ export default {
       switch (type) {
         case "nope":
           this.$store.commit("productAmount1");
-          console.log(
-            this.$store.state.product1,
-            this.$store.state.product2,
-            this.$store.state.product3
-          );
-          console.log("this.$store.state.product 1 & 2  & 3");
           break;
         case "super":
           this.$store.commit("productAmount2");
-          console.log(
-            this.$store.state.product1,
-            this.$store.state.product2,
-            this.$store.state.product3
-          );
-          console.log("this.$store.state.product 1 & 2  & 3");
           break;
         case "like":
           this.$store.commit("productAmount3");
-          console.log(
-            this.$store.state.product1,
-            this.$store.state.product2,
-            this.$store.state.product3
-          );
-          console.log("this.$store.state.product 1 & 2  & 3");
           break;
 
         default:
       }
 
+      this.$store.commit("countIncrement");
       // type === "nope" ? this.countPrep1++ : (this.countPrep1 = this.countPrep1);
       // type === "super" ? this.countPrep2++ : (this.countPrep2 = this.countPrep2);
       // type === "like" ? this.countPrep3++ : (this.countPrep3 = this.countPrep3);

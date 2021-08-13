@@ -12,11 +12,9 @@
 import Layout from "./components/Layout.vue";
 
 export default {
-    components: {
+  components: {
     Layout,
   },
-  mounted(){
-    console.log('mounted');
-  }
-}
+  mounted() {},
+};
 </script>
