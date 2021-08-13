@@ -7,7 +7,7 @@
       <template v-if="this.$store.state.counter < 15">
         <div class="main__sidebar" key="lorem">
           <div class="main__sidebar-top">
-            <router-link to="/" @click="reset()">
+            <router-link to="/" @click="toHome()">
               <img src="@/assets/img/icon-home.svg" alt="home" />
             </router-link>
             <button
@@ -187,7 +187,9 @@ export default {
   created() {
     this.mock();
   },
-  mounted() {},
+  mounted() {
+    this.reset();
+  },
   updated() {},
   methods: {
     toPercentage(product) {
