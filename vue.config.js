@@ -1,7 +1,7 @@
 module.exports = {
-  css: {
-    requireModuleExtension: false,
-  },
+  // css: {
+  //   requireModuleExtension: false,
+  // },
   // scss: {
   //   additionalData: `@import "~@/assets/scss/*.scss";`,
   // },
